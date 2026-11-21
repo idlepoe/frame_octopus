@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "inputs": [
+    "dog-river.mp4",
+    "cat-garden.mp4"
+  ],
+  "firstVideoFrameRendered": true,
+  "exportedCopies": 4,
+  "demoFrames": 487,
+  "outputs": [
+    {
+      "filename": "dog-river_sheet.png",
+      "bytes": 2334690,
+      "width": 1920,
+      "height": 1084,
+      "frames": 1,
+      "attempts": 1,
+      "quality": 100.0,
+      "qualityScore": 1.0,
+      "sceneCount": 4,
+      "fps": 24,
+      "sourceSeconds": 11.011
+    },
+    {
+      "filename": "cat-garden_sheet.png",
+      "bytes": 2384243,
+      "width": 1920,
+      "height": 1084,
+      "frames": 1,
+      "attempts": 1,
+      "quality": 100.0,
+      "qualityScore": 1.0,
+      "sceneCount": 4,
+      "fps": 24,
+      "sourceSeconds": 9.300958
+    },
+    {
+      "filename": "dog-river_animated_sheet.webp",
+      "bytes": 19269990,
+      "width": 1920,
+      "height": 1084,
+      "frames": 48,
+      "attempts": 11,
+      "quality": 97.4,
+      "qualityScore": 0.9908219860940244,
+      "sceneCount": 4,
+      "fps": 24,
+      "sourceSeconds": 11.011
+    },
+    {
+      "filename": "cat-garden_animated_sheet.webp",
+      "bytes": 19875180,
+      "width": 1920,
+      "height": 1084,
+      "frames": 48,
+      "attempts": 10,
+      "quality": 97.5,
+      "qualityScore": 0.9911779122191274,
+      "sceneCount": 4,
+      "fps": 24,
+      "sourceSeconds": 9.300958
+    }
+  ]
+}

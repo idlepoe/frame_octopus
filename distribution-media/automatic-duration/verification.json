@@ -1,0 +1,50 @@
+{
+  "ok": true,
+  "outputs": [
+    {
+      "kind": "sheet",
+      "limitMb": 20,
+      "bytes": 2071283,
+      "width": 1918,
+      "height": 900,
+      "frames": 1,
+      "attempts": 1,
+      "quality": 100.0,
+      "qualityScore": 1.0,
+      "clipSeconds": 0.0,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "dog-river_sheet.png"
+    },
+    {
+      "kind": "animatedSheet",
+      "limitMb": 20,
+      "bytes": 19011390,
+      "width": 1918,
+      "height": 900,
+      "frames": 53,
+      "attempts": 4,
+      "quality": 97.0,
+      "qualityScore": 0.9893959014871396,
+      "clipSeconds": 2.2022,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "dog-river_animated_sheet.webp"
+    }
+  ],
+  "inputCount": 1,
+  "sourceDurations": {
+    "dog-river.mp4": 11.011
+  },
+  "invalidInputCount": 0,
+  "playbackDurationMs": 11011,
+  "firstVideoFrameRendered": true,
+  "exportedCopies": 2,
+  "demoFrames": 0,
+  "languagesRendered": [
+    "en",
+    "ja"
+  ]
+}

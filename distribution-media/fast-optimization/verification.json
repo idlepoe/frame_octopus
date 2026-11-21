@@ -1,0 +1,88 @@
+{
+  "ok": true,
+  "outputs": [
+    {
+      "kind": "sheet",
+      "limitMb": 1,
+      "bytes": 996491,
+      "width": 1240,
+      "height": 584,
+      "frames": 1,
+      "attempts": 11,
+      "sampleAttempts": 0,
+      "quality": 100.0,
+      "qualityScore": 0.7066678302692169,
+      "clipSeconds": 0.0,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "1mb_dog-river_sheet (1).png"
+    },
+    {
+      "kind": "animatedSheet",
+      "limitMb": 1,
+      "bytes": 636102,
+      "width": 490,
+      "height": 232,
+      "frames": 48,
+      "attempts": 2,
+      "sampleAttempts": 1,
+      "quality": 85.0,
+      "qualityScore": 0.316819938303584,
+      "clipSeconds": 2.0,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "1mb_dog-river_animated_sheet.webp"
+    },
+    {
+      "kind": "sheet",
+      "limitMb": 20,
+      "bytes": 2071283,
+      "width": 1918,
+      "height": 900,
+      "frames": 1,
+      "attempts": 1,
+      "sampleAttempts": 0,
+      "quality": 100.0,
+      "qualityScore": 1.0,
+      "clipSeconds": 0.0,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "20mb_dog-river_sheet.png"
+    },
+    {
+      "kind": "animatedSheet",
+      "limitMb": 20,
+      "bytes": 15416502,
+      "width": 1918,
+      "height": 900,
+      "frames": 48,
+      "attempts": 1,
+      "sampleAttempts": 1,
+      "quality": 95.0,
+      "qualityScore": 0.9822075358025827,
+      "clipSeconds": 2.0,
+      "sceneCount": 5,
+      "fps": 24,
+      "sourceSeconds": 11.011,
+      "filename": "20mb_dog-river_animated_sheet.webp"
+    }
+  ],
+  "inputCount": 1,
+  "sourceDurations": {
+    "dog-river.mp4": 11.011
+  },
+  "invalidInputCount": 0,
+  "playbackDurationMs": 11011,
+  "firstVideoFrameRendered": true,
+  "exportedCopies": 2,
+  "demoFrames": 0,
+  "languagesRendered": [
+    "en",
+    "ja"
+  ],
+  "verificationElapsedSeconds": 41.7,
+  "timingScope": "Local 1 MB/20 MB comparison including PNG, playback, decoding, screenshots and export; not a performance guarantee."
+}

@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "outputs": [
+    {
+      "kind": "sheet",
+      "limitMb": 20,
+      "bytes": 29193,
+      "width": 320,
+      "height": 180,
+      "frames": 1,
+      "attempts": 1,
+      "sampleAttempts": 0,
+      "quality": 100.0,
+      "qualityScore": 1.0,
+      "clipSeconds": 0.0,
+      "sceneCount": 1,
+      "fps": 30,
+      "sourceSeconds": 2.0,
+      "filename": "auto-fps-60_sheet.png"
+    },
+    {
+      "kind": "animatedSheet",
+      "limitMb": 20,
+      "bytes": 415376,
+      "width": 320,
+      "height": 180,
+      "frames": 60,
+      "attempts": 1,
+      "sampleAttempts": 1,
+      "quality": 95.0,
+      "qualityScore": 0.9822075358025827,
+      "clipSeconds": 2.0,
+      "sceneCount": 1,
+      "fps": 30,
+      "sourceSeconds": 2.0,
+      "filename": "auto-fps-60_animated_sheet.webp"
+    }
+  ],
+  "inputCount": 1,
+  "sourceDurations": {
+    "auto-fps-60.mp4": 2.0
+  },
+  "invalidInputCount": 0,
+  "playbackDurationMs": 2000,
+  "firstVideoFrameRendered": true,
+  "exportedCopies": 2,
+  "demoFrames": 0,
+  "languagesRendered": [
+    "en",
+    "ja"
+  ],
+  "sourceNominalFps": 60,
+  "sourceDescription": "Locally generated 320x180, two-second, 60 FPS testsrc2 clip."
+}
