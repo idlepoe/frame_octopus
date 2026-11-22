@@ -60,10 +60,11 @@ class MobileButton extends StatelessWidget {
   }) : child = label;
   @override
   Widget build(BuildContext context) {
+    // Preserve intrinsic height when placed directly in the pinned action area.
     final content = ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 22),
       child: icon == null
-          ? Center(widthFactor: 1, child: child)
+          ? Center(widthFactor: 1, heightFactor: 1, child: child)
           : Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -87,3 +87,11 @@ Android is registered in Firebase project `frame-octopus` with package `ink.fram
 Hosting source/configuration and deployment steps are documented in `hosting/README.md`.
 
 The Fluent/Firebase revision passed 17 Flutter tests and Android/Windows debug builds. Firebase initialization and the Advanced → Privacy policy browser link were verified on SM-A346N.
+
+## Select → Creating → Complete
+
+The mobile workbench now replaces its main content by workflow state rather than appending progress/results below the editor. Selection contains only source videos and settings. Creating uses a dedicated mascot/progress/file-count screen with a persistent Stop action; editing controls and result actions are hidden. Completion shows a compact status banner, checked result cards, Save selected and New collection. The edit icon returns to the retained video selection/settings without adding a wizard step. New collection resets the visible batch. Source media and gallery exports are not deleted.
+
+Interrupted, partially failed and empty outputs have distinct status messages. Missing-file details can be expanded. Deleting saved app results is not reported as an encoding failure. The existing foreground-only processing behavior remains unchanged.
+
+Reference observations and screenshots: `docs/android-reference/progress-flow/`. Real-device captures: `docs/android/screenshots/progress-flow/`.

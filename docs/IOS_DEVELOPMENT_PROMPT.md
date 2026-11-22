@@ -44,7 +44,7 @@ App Store 제출, 법적 약관 동의, 새 유료 서비스 활성화는 이번
 - Flutter 프로젝트 하나에 Windows와 Android가 구현되어 있습니다. 현재 `ios/` 폴더는 없습니다.
 - Flutter 3.41.9 / Dart 3.11.5 환경에서 작업했습니다. 실제 도구 버전은 새 환경에서 다시 확인하세요.
 - `fluent_ui`는 **4.13.0**으로 고정되어 있습니다. iOS를 추가한다는 이유만으로 Flutter나 전체 의존성을 일괄 업그레이드하지 마세요.
-- 앱 버전은 `pubspec.yaml` 기준 `1.0.0+3`입니다. 배포용 버전·빌드 번호는 실제 배포 기록을 확인해서 정합니다.
+- 앱 버전은 `pubspec.yaml` 기준 `1.0.0+4`입니다. 배포용 버전·빌드 번호는 실제 배포 기록을 확인해서 정합니다.
 - 영상의 대표 장면들을 정지 PNG 또는 움직이는 WebP 모음으로 생성합니다. 움직이는 모음은 각 장면을 동시에 재생하며 소리가 없습니다.
 - 전체 타임라인을 WebP로 변환하거나 시작·종료 지점을 직접 자르는 앱이 아닙니다. 우잉비는 간단한 UI 흐름의 참고이며 자르기·모자이크·배속 기능을 복제하지 않습니다.
 - 기본 용량 한도는 파일당 20 MB입니다. 1 MB는 1,000,000 bytes이며 일괄 작업의 총용량이 아닙니다.
@@ -54,7 +54,7 @@ App Store 제출, 법적 약관 동의, 새 유료 서비스 활성화는 이번
 - 샘플 기반 용량 추정 뒤 보통 한 번 전체 인코딩하고 실제 초과 시에만 제한적으로 보정합니다. 용량을 빈틈없이 채우는 세밀한 반복 탐색이나 여러 전체 인코딩의 병렬 실행을 추가하지 마세요.
 - Android는 현재 포그라운드 처리입니다. 생성 중 화면을 켜 두고 앱이 배경으로 이동하면 미완료 작업을 취소합니다. 완성 결과는 현재 세션에 유지하며 다음 콜드 스타트에서 이전 앱 전용 작업 파일을 정리합니다.
 - FluentApp, ComboBox, ToggleSwitch, Slider, Checkbox, InfoBar, ContentDialog와 Fluent 버튼·아이콘을 적용했습니다. Material 코드는 레이아웃·동영상·제스처 기반 구조로 일부 남아 있으며 Material 3 시각 테마를 사용하지 않습니다.
-- Samsung SM-A346N(Android 16)에서 WebP/PNG 생성, 갤러리 저장, 공유창, 결과 삭제, Firebase 초기화와 개인정보처리방침 링크를 확인했습니다. Windows/Android debug 빌드와 Flutter 테스트 17개가 통과했습니다.
+- Samsung SM-A346N(Android 16)에서 WebP/PNG 생성, 갤러리 저장, 공유창, 결과 삭제, Firebase 초기화와 개인정보처리방침 링크를 확인했습니다. Windows/Android debug 빌드와 Flutter 테스트 19개가 통과했습니다.
 - **iOS의 CocoaPods 설치, 네이티브 인코딩, 사진 저장, 실제 기기 동작은 아직 검증하지 않았습니다.** Android 결과를 iOS 검증으로 간주하지 마세요.
 
 ## 먼저 읽을 소스
@@ -63,6 +63,7 @@ App Store 제출, 법적 약관 동의, 새 유료 서비스 활성화는 이번
 |---|---|
 | `lib/main.dart` | 현재 Android만 모바일 진입점을 사용합니다. iOS도 모바일로 분기하고 `windowManager`/Windows 플레이어 초기화를 피해야 합니다. |
 | `lib/mobile/mobile_app.dart` | Fluent 모바일 화면과 작업 흐름. 시작 함수는 현재 Android FirebaseOptions를 명시적으로 사용하므로 플랫폼별 수정이 필요합니다. |
+| `lib/mobile/progress_flow.dart` | 선택 → 진행 → 완료 상태별 화면과 진행 표시. iOS에서도 같은 단순한 흐름과 중지·실패 상태 구분을 유지하세요. |
 | `lib/mobile/fluent_mobile.dart` | Fluent 테마, 터치 크기, 카드·패널·버튼 래퍼. iPhone SafeArea와 글자 확대를 검증하세요. |
 | `lib/mobile/gallery_service.dart` | `frame_octopus/gallery` 채널. iOS 구현이 없으므로 `pickVideos`/`save` 계약에 맞는 어댑터가 필요합니다. |
 | `android/app/src/main/kotlin/ink/frameoctopus/frame_octopus/` | 현재 Android 갤러리 및 회전 메타데이터 구현. 경로나 MediaStore 코드를 iOS로 그대로 복사하지 마세요. |

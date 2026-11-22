@@ -11,7 +11,7 @@
     ],
     "frames": 66
   },
-  "tests": 17,
+  "tests": 19,
   "checks": [
     "gallery multi-selection",
     "two WebP files generated below 20 MB with initial 1920 px build",
@@ -26,7 +26,8 @@
     "Fluent UI controls and result dialog checked at 150% text scale",
     "Firebase Core initialized on SM-A346N; project frame-octopus",
     "Android and Windows debug builds passed with Firebase Core",
-    "three hosted policy routes HTTP 200 with CSP"
+    "three hosted policy routes HTTP 200 with CSP",
+    "Select/Creating/Complete content replacement, real processing and cancellation verified on SM-A346N"
   ],
   "limitations": [
     "Foreground processing only; leaving the app cancels unfinished work",

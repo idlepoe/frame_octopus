@@ -97,6 +97,8 @@ class StudioController extends ChangeNotifier {
   }
 
   QueueItem? selected;
+  QueueItem? activeItem;
+  int activeJobIndex = 0, activeJobCount = 0;
   OutputKind kind = OutputKind.animatedSheet;
   bool busy = false, importing = false, closed = false;
   double progress = 0;
@@ -211,6 +213,7 @@ class StudioController extends ChangeNotifier {
     results.removeWhere((path, _) => rebuilding.contains(path));
     fitted.removeWhere((path, _) => rebuilding.contains(path));
     busy = true;
+    activeJobCount = jobs.length;
     progress = 0;
     processor.begin();
     final optimizer = CapacityOptimizer(processor);
@@ -219,6 +222,8 @@ class StudioController extends ChangeNotifier {
     try {
       for (var i = 0; i < jobs.length; i++) {
         final item = jobs[i];
+        activeItem = item;
+        activeJobIndex = i + 1;
         item.setStatus('processing');
         changed();
         try {
@@ -255,6 +260,7 @@ class StudioController extends ChangeNotifier {
       setMessage('중지했습니다. 완료된 결과는 유지됩니다.');
     } finally {
       busy = false;
+      activeItem = null;
       changed();
     }
   }

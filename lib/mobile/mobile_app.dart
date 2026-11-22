@@ -17,6 +17,7 @@ import '../l10n/app_language.dart';
 import '../ui/mascot.dart';
 import 'gallery_service.dart';
 import 'mobile_strings.dart';
+import 'progress_flow.dart';
 
 Future<void> runMobileApp() async {
   await AppLanguage.instance.load();
@@ -77,16 +78,35 @@ class _MobileStudioState extends State<MobileStudio>
   late final studio = widget.controller ?? StudioController();
   final gallery = GalleryService();
   final selectedResults = <String>{};
+  final completedSources = <String>{};
   final importedIds = <String, String>{};
   bool ready = false, picking = false, saving = false, cancelling = false;
+  bool showResults = false,
+      wasStopped = false,
+      starting = false,
+      wasWorking = false;
+  MobileStage get stage =>
+      studio.busy || studio.importing || picking || starting
+      ? MobileStage.processing
+      : showResults
+      ? MobileStage.complete
+      : MobileStage.selection;
   bool get locked =>
-      studio.busy || studio.importing || picking || saving || !ready;
+      studio.busy ||
+      studio.importing ||
+      picking ||
+      saving ||
+      starting ||
+      !ready;
   String t(String en, String ko, String ja) => mobileText(en, ko, ja);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    showResults = studio.results.isNotEmpty;
+    completedSources.addAll(studio.results.keys);
+    wasWorking = studio.busy;
     studio.addListener(refresh);
     initialize();
   }
@@ -111,7 +131,123 @@ class _MobileStudioState extends State<MobileStudio>
   }
 
   void refresh() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    if (wasWorking && !studio.busy) {
+      showResults = true;
+      completedSources
+        ..clear()
+        ..addAll(studio.results.keys);
+      selectedResults.addAll(studio.results.keys);
+    }
+    wasWorking = studio.busy;
+    setState(() {});
+  }
+
+  void newCollection() {
+    if (locked) return;
+    studio.items.clear();
+    studio.results.clear();
+    studio.fitted.clear();
+    studio.selected = null;
+    importedIds.clear();
+    selectedResults.clear();
+    completedSources.clear();
+    showResults = false;
+    wasStopped = false;
+    studio.changed();
+  }
+
+  Widget completionSummary() {
+    // Keep the completion banner compact so the result preview stays prominent.
+    final count = studio.results.length;
+    final missing = studio.items
+        .where((i) => !completedSources.contains(i.path))
+        .toList();
+    final title = wasStopped
+        ? t('Stopped', '중지했습니다', '停止しました')
+        : count == 0 && completedSources.isNotEmpty
+        ? t('Results deleted', '결과를 삭제했습니다', '結果を削除しました')
+        : count == 0
+        ? t('Could not create a collection', '모음을 만들지 못했습니다', '一覧を作成できませんでした')
+        : missing.isNotEmpty
+        ? t('Some files need attention', '일부 파일을 확인해 주세요', '一部のファイルを確認してください')
+        : t('Your collection is ready', '모음이 완성됐어요', '一覧が完成しました');
+    return MobileCard(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                MascotArt(
+                  count > 0 ? MascotPose.complete : MascotPose.error,
+                  size: 48,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Semantics(
+                        liveRegion: true,
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        t(
+                          '$count ${count == 1 ? 'result' : 'results'} ready to save',
+                          '$count개 결과를 저장할 수 있어요',
+                          '$count個の結果を保存できます',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                MobileIconButton(
+                  key: const ValueKey('edit-selection'),
+                  tooltip: t('Edit selection', '선택·설정 수정', '選択と設定を変更'),
+                  onPressed: locked
+                      ? null
+                      : () => setState(() => showResults = false),
+                  icon: const Icon(f.FluentIcons.edit),
+                ),
+              ],
+            ),
+            if (missing.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              f.Expander(
+                header: Text(
+                  t(
+                    '${missing.length} ${missing.length == 1 ? 'file' : 'files'} not created',
+                    '${missing.length}개 미완료 파일',
+                    '${missing.length}個の未完了ファイル',
+                  ),
+                ),
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final item in missing)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          '${item.name} · ${item.status}',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -169,6 +305,11 @@ class _MobileStudioState extends State<MobileStudio>
 
   Future<void> generate() async {
     if (locked || studio.items.isEmpty) return;
+    setState(() {
+      starting = true;
+      showResults = false;
+      wasStopped = false;
+    });
     try {
       await WakelockPlus.enable();
       selectedResults.clear();
@@ -179,13 +320,20 @@ class _MobileStudioState extends State<MobileStudio>
       notice(errorText(e));
     } finally {
       await WakelockPlus.disable();
+      if (mounted) {
+        starting = false;
+        showResults = true;
+      }
       refresh();
     }
   }
 
   Future<void> stop() async {
     if (cancelling) return;
-    setState(() => cancelling = true);
+    setState(() {
+      cancelling = true;
+      wasStopped = true;
+    });
     try {
       await studio.cancel();
     } finally {
@@ -610,286 +758,283 @@ class _MobileStudioState extends State<MobileStudio>
       ),
       body: !ready
           ? const MascotStartup()
+          : stage == MobileStage.processing
+          ? MobileProcessingView(
+              studio: studio,
+              preparing: !studio.busy,
+              cancelling: cancelling,
+            )
           : Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 720),
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    MobileCard(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                    MobileStageIndicator(stage: stage),
+                    const SizedBox(height: 16),
+                    if (stage == MobileStage.selection) ...[
+                      MobileCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Wrap(
+                                spacing: 12,
+                                runSpacing: 16,
+                                children: [
+                                  SizedBox(
+                                    width: 140,
+                                    child: dropdown<int>(
+                                      t(
+                                        'Size per file',
+                                        '파일당 최대 용량',
+                                        'ファイルの最大容量',
+                                      ),
+                                      studio.targetMb,
+                                      {
+                                        0: t('Unlimited', '제한 없음', '無制限'),
+                                        for (final n in [1, 5, 10, 20, 50, 100])
+                                          n: '$n MB',
+                                      },
+                                      (v) => update(() => studio.targetMb = v),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 158,
+                                    child: dropdown<OutputKind>(
+                                      t('Output', '출력 형식', '出力形式'),
+                                      studio.kind,
+                                      {
+                                        OutputKind.animatedSheet: 'WebP',
+                                        OutputKind.sheet: 'PNG',
+                                      },
+                                      (v) => update(() => studio.kind = v),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                studio.kind == OutputKind.sheet
+                                    ? t(
+                                        'One still image · PNG',
+                                        '한 장의 정지 이미지 · PNG',
+                                        '1枚の静止画像 · PNG',
+                                      )
+                                    : t(
+                                        'Scenes play together · WebP',
+                                        '여러 장면이 함께 재생 · WebP',
+                                        '複数のシーンを同時再生 · WebP',
+                                      ),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      t(
+                                        'Scenes and layout, automatically.',
+                                        '장면과 배치는 자동으로.',
+                                        'シーンと配置は自動で。',
+                                      ),
+                                    ),
+                                  ),
+                                  MobileButton(
+                                    kind: MobileButtonKind.link,
+                                    onPressed: locked ? null : advanced,
+                                    child: Text(t('Advanced', '상세 설정', '詳細設定')),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (studio.items.isEmpty)
+                        MobileCard(
+                          child: InkWell(
+                            onTap: locked ? null : pick,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 36,
+                              ),
+                              child: Column(
+                                children: [
+                                  const MascotArt(MascotPose.select, size: 132),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    t('Choose videos', '영상 고르기', '動画を選ぶ'),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    t(
+                                      'From your gallery. Octopus will arrange the scenes.',
+                                      '갤러리에서 고르면 문어가 장면을 배치해요.',
+                                      'ギャラリーから選ぶと、シーンを自動で配置します。',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    t(
+                                      'On this device · Originals preserved',
+                                      '내 기기에서 처리 · 원본 유지',
+                                      '端末内で処理・元動画を保持',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      else ...[
+                        if (studio.selected != null)
+                          MobileVideoPreview(
+                            key: ValueKey(studio.selected!.path),
+                            path: studio.selected!.path,
+                            enabled: !studio.busy,
+                          ),
+                        const SizedBox(height: 12),
+                        Row(
                           children: [
-                            Wrap(
-                              spacing: 12,
-                              runSpacing: 16,
-                              children: [
-                                SizedBox(
-                                  width: 140,
-                                  child: dropdown<int>(
-                                    t(
-                                      'Size per file',
-                                      '파일당 최대 용량',
-                                      'ファイルの最大容量',
-                                    ),
-                                    studio.targetMb,
-                                    {
-                                      0: t('Unlimited', '제한 없음', '無制限'),
-                                      for (final n in [1, 5, 10, 20, 50, 100])
-                                        n: '$n MB',
-                                    },
-                                    (v) => update(() => studio.targetMb = v),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 158,
-                                  child: dropdown<OutputKind>(
-                                    t('Output', '출력 형식', '出力形式'),
-                                    studio.kind,
-                                    {
-                                      OutputKind.animatedSheet: 'WebP',
-                                      OutputKind.sheet: 'PNG',
-                                    },
-                                    (v) => update(() => studio.kind = v),
-                                  ),
-                                ),
-                              ],
+                            Expanded(
+                              child: Text(
+                                '${t('Videos', '영상', '動画')} ${studio.items.length}',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
                             ),
-                            const SizedBox(height: 12),
-                            Text(
-                              studio.kind == OutputKind.sheet
-                                  ? t(
-                                      'One still image · PNG',
-                                      '한 장의 정지 이미지 · PNG',
-                                      '1枚の静止画像 · PNG',
-                                    )
-                                  : t(
-                                      'Scenes play together · WebP',
-                                      '여러 장면이 함께 재생 · WebP',
-                                      '複数のシーンを同時再生 · WebP',
-                                    ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    t(
-                                      'Scenes and layout, automatically.',
-                                      '장면과 배치는 자동으로.',
-                                      'シーンと配置は自動で。',
-                                    ),
-                                  ),
-                                ),
-                                MobileButton(
-                                  kind: MobileButtonKind.link,
-                                  onPressed: locked ? null : advanced,
-                                  child: Text(t('Advanced', '상세 설정', '詳細設定')),
-                                ),
-                              ],
+                            MobileButton.icon(
+                              kind: MobileButtonKind.link,
+                              onPressed: locked || studio.items.length >= 50
+                                  ? null
+                                  : pick,
+                              icon: const Icon(f.FluentIcons.add),
+                              label: Text(t('Add', '추가', '追加')),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    if (studio.items.isEmpty)
-                      MobileCard(
-                        child: InkWell(
-                          onTap: locked ? null : pick,
-                          borderRadius: BorderRadius.circular(12),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 36,
-                            ),
-                            child: Column(
-                              children: [
-                                const MascotArt(MascotPose.select, size: 132),
-                                const SizedBox(height: 16),
-                                Text(
-                                  t('Choose videos', '영상 고르기', '動画を選ぶ'),
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.headlineSmall,
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  t(
-                                    'From your gallery. Octopus will arrange the scenes.',
-                                    '갤러리에서 고르면 문어가 장면을 배치해요.',
-                                    'ギャラリーから選ぶと、シーンを自動で配置します。',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  t(
-                                    'On this device · Originals preserved',
-                                    '내 기기에서 처리 · 원본 유지',
-                                    '端末内で処理・元動画を保持',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    else ...[
-                      if (studio.selected != null)
-                        MobileVideoPreview(
-                          key: ValueKey(studio.selected!.path),
-                          path: studio.selected!.path,
-                          enabled: !studio.busy,
-                        ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${t('Videos', '영상', '動画')} ${studio.items.length}',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ),
-                          MobileButton.icon(
-                            kind: MobileButtonKind.link,
-                            onPressed: locked || studio.items.length >= 50
-                                ? null
-                                : pick,
-                            icon: const Icon(f.FluentIcons.add),
-                            label: Text(t('Add', '추가', '追加')),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 178,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: studio.items.length,
-                          separatorBuilder: (_, i) => const SizedBox(width: 12),
-                          itemBuilder: (context, index) {
-                            final item = studio.items[index];
-                            return SizedBox(
-                              width: 164,
-                              child: MobileCard(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  side: BorderSide(
-                                    color: studio.selected == item
-                                        ? Theme.of(context).colorScheme.primary
-                                        : const Color(0xffdce1e8),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const SizedBox(width: 12),
-                                        Text('${index + 1}'),
-                                        const Spacer(),
-                                        MobileIconButton(
-                                          tooltip: t(
-                                            'Remove video',
-                                            '영상 제외',
-                                            '動画を除外',
-                                          ),
-                                          onPressed: locked
-                                              ? null
-                                              : () {
-                                                  importedIds.remove(item.path);
-                                                  studio.remove(item);
-                                                },
-                                          icon: const Icon(
-                                            f.FluentIcons.cancel,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: locked
-                                            ? null
-                                            : () {
-                                                studio.selected = item;
-                                                studio.changed();
-                                              },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          child: item.thumbnailPath == null
-                                              ? const Center(
-                                                  child: Icon(
-                                                    f.FluentIcons.video,
-                                                  ),
-                                                )
-                                              : Image.file(
-                                                  File(item.thumbnailPath!),
-                                                  fit: BoxFit.contain,
-                                                  width: double.infinity,
-                                                  cacheWidth: 328,
-                                                ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item.name,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            item.status,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(
+                        SizedBox(
+                          height: 178,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: studio.items.length,
+                            separatorBuilder: (_, i) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (context, index) {
+                              final item = studio.items[index];
+                              return SizedBox(
+                                width: 164,
+                                child: MobileCard(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: studio.selected == item
+                                          ? Theme.of(
                                               context,
-                                            ).textTheme.bodySmall,
+                                            ).colorScheme.primary
+                                          : const Color(0xffdce1e8),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const SizedBox(width: 12),
+                                          Text('${index + 1}'),
+                                          const Spacer(),
+                                          MobileIconButton(
+                                            tooltip: t(
+                                              'Remove video',
+                                              '영상 제외',
+                                              '動画を除外',
+                                            ),
+                                            onPressed: locked
+                                                ? null
+                                                : () {
+                                                    importedIds.remove(
+                                                      item.path,
+                                                    );
+                                                    studio.remove(item);
+                                                  },
+                                            icon: const Icon(
+                                              f.FluentIcons.cancel,
+                                              size: 20,
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: locked
+                                              ? null
+                                              : () {
+                                                  studio.selected = item;
+                                                  studio.changed();
+                                                },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                            ),
+                                            child: item.thumbnailPath == null
+                                                ? const Center(
+                                                    child: Icon(
+                                                      f.FluentIcons.video,
+                                                    ),
+                                                  )
+                                                : Image.file(
+                                                    File(item.thumbnailPath!),
+                                                    fit: BoxFit.contain,
+                                                    width: double.infinity,
+                                                    cacheWidth: 328,
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              item.status,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                     ],
-                    if (studio.importing || picking || studio.busy)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Column(
-                          children: [
-                            if (studio.busy) const LoadingMascot(size: 64),
-                            MobileProgress(
-                              value: studio.busy ? studio.progress : null,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(studio.message),
-                            if (studio.busy)
-                              Text(
-                                t(
-                                  'Keep this app open. The screen stays awake.',
-                                  '앱을 열어 두세요. 화면이 꺼지지 않도록 유지합니다.',
-                                  'アプリを開いたままにしてください。画面を点灯したまま処理します。',
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                          ],
-                        ),
-                      ),
-                    if (studio.results.isNotEmpty) ...[
+                    if (stage == MobileStage.complete) ...[
+                      completionSummary(),
+                      const SizedBox(height: 16),
+                    ],
+                    if (stage == MobileStage.complete &&
+                        studio.results.isNotEmpty) ...[
                       const SizedBox(height: 24),
                       Row(
                         children: [
@@ -1052,60 +1197,33 @@ class _MobileStudioState extends State<MobileStudio>
                 ),
               ),
             ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xffe5e5e5))),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-            child: studio.busy
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      MobileProgress(value: studio.progress),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${(studio.progress * 100).round()}% · ${studio.message}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      MobileButton.icon(
-                        kind: MobileButtonKind.standard,
+      bottomNavigationBar: stage == MobileStage.processing
+          ? studio.busy
+                ? SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+                      child: MobileButton(
                         onPressed: cancelling ? null : stop,
-                        icon: const Icon(f.FluentIcons.stop),
-                        label: Text(t('Stop', '생성 중지', '停止')),
+                        child: Text(t('Stop', '생성 중지', '停止')),
                       ),
-                    ],
+                    ),
                   )
-                : Column(
+                : null
+          : Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(top: BorderSide(color: Color(0xffe5e5e5))),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (studio.results.isNotEmpty) ...[
-                        MobileButton.icon(
-                          kind: MobileButtonKind.primary,
-                          onPressed: locked || selectedResults.isEmpty
-                              ? null
-                              : save,
-                          icon: const Icon(f.FluentIcons.download),
-                          label: Text(
-                            saving
-                                ? t('Saving…', '저장 중…', '保存中…')
-                                : t(
-                                    'Save ${selectedResults.length} to gallery',
-                                    '${selectedResults.length}개 갤러리에 저장',
-                                    '${selectedResults.length}個をギャラリーに保存',
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                      if (studio.results.isEmpty)
+                      if (stage == MobileStage.selection)
                         MobileButton.icon(
                           kind: MobileButtonKind.primary,
                           onPressed:
@@ -1118,17 +1236,36 @@ class _MobileStudioState extends State<MobileStudio>
                             t('Create collection', '모음 만들기', '一覧を作成'),
                           ),
                         )
-                      else
+                      else ...[
+                        if (studio.results.isNotEmpty) ...[
+                          MobileButton.icon(
+                            kind: MobileButtonKind.primary,
+                            onPressed: locked || selectedResults.isEmpty
+                                ? null
+                                : save,
+                            icon: const Icon(f.FluentIcons.download),
+                            label: Text(
+                              saving
+                                  ? t('Saving…', '저장 중…', '保存中…')
+                                  : t(
+                                      'Save ${selectedResults.length} to gallery',
+                                      '${selectedResults.length}개 갤러리에 저장',
+                                      '${selectedResults.length}個をギャラリーに保存',
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                         MobileButton(
-                          kind: MobileButtonKind.standard,
-                          onPressed: locked ? null : generate,
-                          child: Text(t('Create again', '다시 만들기', 'もう一度作成')),
+                          onPressed: locked ? null : newCollection,
+                          child: Text(t('New collection', '새로 만들기', '新しく作成')),
                         ),
+                      ],
                     ],
                   ),
-          ),
-        ),
-      ),
+                ),
+              ),
+            ),
     ),
   );
 }

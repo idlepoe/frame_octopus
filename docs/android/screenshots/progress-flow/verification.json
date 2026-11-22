@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-22",
+  "device": "Samsung SM-A346N / Android 16",
+  "reference": "https://wooingbee.ink/oder/dcinside",
+  "reference_viewport": [
+    390,
+    844
+  ],
+  "workflow": [
+    "selection",
+    "dedicated_processing",
+    "completion"
+  ],
+  "verified": [
+    "real gallery selection and automatic scene preparation",
+    "real WebP generation and automatic result-only completion screen",
+    "gallery save action from completion",
+    "dedicated progress page with percentage, current file, mascot and pinned Stop",
+    "Stop cancels the active native encode and shows Stopped instead of success",
+    "retained source selection can be reopened for editing",
+    "compact Fluent completion banner and result preview",
+    "small-screen 150% text checks and pinned button size checks",
+    "new collection resets the visible batch",
+    "19 Flutter tests and static analysis passed"
+  ],
+  "screenshots": [
+    "01-selection.png",
+    "02-processing.png",
+    "03-complete.png",
+    "04-stopped.png"
+  ],
+  "scope": "Android/mobile presentation; existing encoding policy and Windows workbench retained"
+}

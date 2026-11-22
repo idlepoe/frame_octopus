@@ -23,6 +23,8 @@ Animated sheets play representative clips simultaneously. They are not a full-ti
 
 ## Android beta
 
+Release-signed ARM64 Android APK: [Android beta 1](https://github.com/idlepoe/frame_octopus/releases/tag/v1.0.0-android-beta.1). Requires Android 7.0 or newer. See the release notes for installation and current limitations.
+
 An Android app is now included alongside Windows, with a single gallery/create/save workflow, automatic scene settings, native gallery export, sharing and result selection/deletion. Its default output width is 1280 px (adjustable in Advanced); the existing Windows default remains 1920 px. Android processing is currently foreground-only. See [Android setup, limitations and real-device screenshots](docs/android/README.md).
 
 For development on a Mac, use the [iOS development prompt and handoff guide](docs/IOS_DEVELOPMENT_PROMPT.md). iOS has not been implemented or built yet; the guide identifies platform-specific work and verification requirements.
