@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18444933139",
+    "project_id": "frame-octopus",
+    "storage_bucket": "frame-octopus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18444933139:android:03c4c58207011ebdd207e6",
+        "android_client_info": {
+          "package_name": "ink.frameoctopus.frame_octopus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6ET1yg3kDcxTqoiTnPgcV_rlXTqnHbKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

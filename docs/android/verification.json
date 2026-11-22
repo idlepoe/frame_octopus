@@ -1,0 +1,36 @@
+{
+  "device": "Samsung SM-A346N",
+  "android": "16",
+  "default_max_mb": 20,
+  "mobile_width_setting": 1280,
+  "output": {
+    "bytes": 12741266,
+    "dimensions": [
+      1280,
+      724
+    ],
+    "frames": 66
+  },
+  "tests": 17,
+  "checks": [
+    "gallery multi-selection",
+    "two WebP files generated below 20 MB with initial 1920 px build",
+    "gallery save verified in MediaStore",
+    "final 1280 px build generated WebP and saved",
+    "native share chooser opened; no recipient selected",
+    "manual 30 FPS and 10 second settings",
+    "compact UI at 150% text scale",
+    "Windows debug build",
+    "still PNG generated: 1,195,006 bytes; saved to MediaStore",
+    "selected app result deleted; saved PNG gallery copy remained",
+    "Fluent UI controls and result dialog checked at 150% text scale",
+    "Firebase Core initialized on SM-A346N; project frame-octopus",
+    "Android and Windows debug builds passed with Firebase Core",
+    "three hosted policy routes HTTP 200 with CSP"
+  ],
+  "limitations": [
+    "Foreground processing only; leaving the app cancels unfinished work",
+    "Long-video and low-memory stress tests not performed",
+    "Release signing and store submission not performed"
+  ]
+}

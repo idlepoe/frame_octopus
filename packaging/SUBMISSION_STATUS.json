@@ -1,0 +1,25 @@
+{
+  "product": "Frame Octopus",
+  "storeId": "9NVSS25893SG",
+  "submissionId": "1152921505702469010",
+  "date": "2026-11-22",
+  "package": "build/distribution/Frame-Octopus-1.0.0-Windows-x64-store.msix",
+  "packageVersion": "1.0.0.0",
+  "packageUploadValidation": "passed",
+  "pricing": "Free; worldwide; public; publish after certification",
+  "properties": "complete",
+  "listings": {
+    "en-us": "complete",
+    "ko-kr": "complete",
+    "ja-jp": "complete"
+  },
+  "screenshotsPerLanguage": 4,
+  "trailer": "English: H.264 High 1080p30/AAC-LC stereo, thumbnail and title added",
+  "certificationNotes": "saved",
+  "privacyUrl": "https://gist.github.com/idlepoe/a9d2af09558b57ae532b9f41be53b3af",
+  "sourceRepositoryVisibility": "private; unchanged",
+  "ageRating": "Everyone / 3+ preview; IARC terms/adult confirmation unchecked",
+  "certificationSubmitted": false,
+  "blockedAction": "Local WACK command rejected by automatic approval review: blocked by policy",
+  "nextAction": "Obtain account owner confirmation for IARC binding terms and legal adulthood, save age rating, submit for certification."
+}

@@ -16,6 +16,7 @@ class StudioController extends ChangeNotifier {
   final results = <String, GeneratedFile>{};
   final fitted = <String, FittedOutput>{};
   int sceneLimit = 0, targetMb = 20, fps = 24;
+  int outputWidth = Platform.isAndroid ? 1280 : 1920;
   double clipSeconds = 2;
   bool autoClip = true, autoFps = true;
   String layoutShape = 'auto', sceneAspect = 'source';
@@ -40,6 +41,10 @@ class StudioController extends ChangeNotifier {
       autoFps = data['autoFps'] as bool? ?? true;
       clipSeconds = ((data['clip'] as num?)?.toDouble() ?? 2).clamp(.5, 10);
       autoClip = data['autoClip'] as bool? ?? true;
+      if (Platform.isAndroid &&
+          [960, 1280, 1920].contains(data['mobileWidth'])) {
+        outputWidth = data['mobileWidth'] as int;
+      }
       layoutShape = ['auto', '16:9', '9:16'].contains(data['layout'])
           ? data['layout'] as String
           : 'auto';
@@ -61,6 +66,7 @@ class StudioController extends ChangeNotifier {
       'autoFps': autoFps,
       'clip': clipSeconds,
       'autoClip': autoClip,
+      if (Platform.isAndroid) 'mobileWidth': outputWidth,
       'layout': layoutShape,
       'aspect': sceneAspect,
     });
@@ -84,6 +90,7 @@ class StudioController extends ChangeNotifier {
     autoFps = true;
     clipSeconds = 2;
     autoClip = true;
+    outputWidth = Platform.isAndroid ? 1280 : 1920;
     layoutShape = 'auto';
     sceneAspect = 'source';
     savePreferences();
@@ -120,7 +127,7 @@ class StudioController extends ChangeNotifier {
           : ((metadata?.duration ?? 10) / 6).ceil().clamp(4, 24)
       ..fps = fps
       ..clipSeconds = clipSeconds
-      ..width = 1920
+      ..width = outputWidth
       ..quality = 100
       ..sheetAspect = layoutShape
       ..thumbnailAspect = sceneAspect
@@ -146,13 +153,19 @@ class StudioController extends ChangeNotifier {
           : 24;
       final clip = SamplePlan.create(value, metadata, kind).clip;
       // Bound work for long clips without adding another encoding probe.
-      final frameBudgetFps = (120 / math.max(.001, clip)).floor().clamp(1, 30);
+      final frameBudgetFps =
+          ((Platform.isAndroid ? 80 : 120) / math.max(.001, clip))
+              .floor()
+              .clamp(1, 30);
       value.fps = math.min(sourceFps, autoFps ? frameBudgetFps : fps);
     }
     return value;
   }
 
-  Future<void> addFiles(List<String> paths) async {
+  Future<void> addFiles(
+    List<String> paths, {
+    Map<String, String> names = const {},
+  }) async {
     if (busy || importing) return;
     importing = true;
     processor.begin();
@@ -162,7 +175,7 @@ class StudioController extends ChangeNotifier {
         if (closed) break;
         if (items.any((item) => p.equals(item.path, path))) continue;
         if (items.length >= maxFiles) break;
-        final item = QueueItem(path, p.basename(path));
+        final item = QueueItem(path, names[path] ?? p.basename(path));
         items.add(item);
         selected ??= item;
         changed();

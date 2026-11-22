@@ -19,11 +19,16 @@ import 'package:window_manager/window_manager.dart';
 import 'ui/mascot.dart';
 import 'ui/workbench.dart';
 import 'ui/studio_theme.dart';
+import 'mobile/mobile_app.dart';
 
 final _applicationCaptureKey = GlobalKey();
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) {
+    await runMobileApp();
+    return;
+  }
   await windowManager.ensureInitialized();
   await windowManager.setPreventClose(true);
   MediaKit.ensureInitialized();

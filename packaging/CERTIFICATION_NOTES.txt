@@ -1,0 +1,15 @@
+Frame Octopus 1.0.0 is a free, offline Windows x64 desktop utility. It has no login, advertising, purchases, subscription, external service or network requirement for conversion.
+
+Test steps:
+1. Launch Frame Octopus. The complete welcome surface opens the native video picker; videos can also be dragged from Explorer.
+2. Add a short local MP4. Source playback is available. Choose Still PNG or Animated WebP.
+3. Keep the default 20 MB limit and automatic scene count, clip length and FPS. Create the result.
+4. Open the results view, zoom a result, select one or more outputs and save to a writable folder. A success notification confirms the saved count. Existing files are not overwritten.
+5. Advanced settings allow manual FPS and clip length by switching off automatic mode. Preferences and English/Korean/Japanese language selection persist.
+
+runFullTrust justification: This Flutter Win32 desktop application uses native Windows file/folder dialogs, reads user-selected local videos and uses packaged FFmpegKit/libmpv DLLs to decode, render and encode locally. It needs a desktop process for these operations. It does not install services, drivers or require administrator privileges.
+
+The screenshots use Mixkit Free License dog/cat footage. No raw sample footage is bundled. The app creates representative contact sheets, not full-timeline videos, and animated sheets contain no audio. Large/complex inputs may take longer; Stop cancels processing.
+
+Privacy: https://gist.github.com/idlepoe/a9d2af09558b57ae532b9f41be53b3af
+Support: idlepoe@gmail.com

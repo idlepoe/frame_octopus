@@ -116,6 +116,11 @@ install(FILES
   COMPONENT Runtime)
 
 # Include the app-local MSVC redistributables selected by the build toolchain.
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../packaging/native-notices/"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}/licenses/native-provenance"
+  COMPONENT Runtime)
+
+# Include the app-local MSVC redistributables selected by the build toolchain.
 # This avoids relying on the developer machine's globally installed CRT.
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
 include(InstallRequiredSystemLibraries)

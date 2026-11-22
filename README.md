@@ -21,6 +21,12 @@ The size estimate is content-dependent and approximate, not an exhaustive percep
 
 Animated sheets play representative clips simultaneously. They are not a full-timeline export and have no audio. Layout, size and smoothness can change during capacity fitting. The size limit applies separately to each generated file, not to a batch total. Completed results are stored locally until exported; source videos are never overwritten.
 
+## Android beta
+
+An Android app is now included alongside Windows, with a single gallery/create/save workflow, automatic scene settings, native gallery export, sharing and result selection/deletion. Its default output width is 1280 px (adjustable in Advanced); the existing Windows default remains 1920 px. Android processing is currently foreground-only. See [Android setup, limitations and real-device screenshots](docs/android/README.md).
+
+For development on a Mac, use the [iOS development prompt and handoff guide](docs/IOS_DEVELOPMENT_PROMPT.md). iOS has not been implemented or built yet; the guide identifies platform-specific work and verification requirements.
+
 ## Run and build
 
 Install Flutter with Windows desktop support and Visual Studio's Desktop development with C++ workload:
@@ -83,3 +89,7 @@ Privacy policy: docs/PRIVACY.md. Licensing: LICENSE and THIRD_PARTY_NOTICES.md. 
 ## Release media
 
 Current native PNG screenshots, Store-framed 1920x1080 versions, a 1080p app demo and generated collections are in `distribution-media/`. See [distribution-media/README.md](distribution-media/README.md) for source credits, license selection and reproduction. The raw sample footage remains local and is excluded from application packages and Git.
+
+## Hosted privacy policy
+
+Privacy policy: [English](https://frame-octopus.web.app/privacy) · [한국어](https://frame-octopus.web.app/ko/privacy) · [日本語](https://frame-octopus.web.app/ja/privacy). Android's Advanced panel opens the selected language. Firebase Core is connected to the Android app; analytics and cloud media uploads are not enabled. See [Hosting deployment documentation](hosting/README.md).

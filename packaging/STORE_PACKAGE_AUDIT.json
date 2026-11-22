@@ -1,0 +1,19 @@
+{
+  "identity": {
+    "Name": "8C13C29F.FrameOctopus",
+    "Version": "1.0.0.0",
+    "Publisher": "CN=E6E0CA64-5693-4B23-9A95-DF94678405F8",
+    "ProcessorArchitecture": "x64"
+  },
+  "publisherDisplayName": "이제영",
+  "bytes": 90086284,
+  "sha256": "630d06274afa9d891f8473e83f1baca754ddfd39bce72cd2bd7ed05f6a99c46d",
+  "crc_ok": true,
+  "files": 358,
+  "capabilities": [
+    {
+      "Name": "runFullTrust"
+    }
+  ],
+  "nativeNotices": true
+}

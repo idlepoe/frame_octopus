@@ -51,8 +51,15 @@ app.*.map.json
 *.key
 *.jks
 *.keystore
+*.p8
+*.mobileprovision
+*.provisionprofile
 /signing/
 /verification/
 
 # Raw third-party stock footage is kept locally for reproducible media capture.
 /distribution-media/source/
+
+# Firebase deployment caches and local CLI logs (never credentials)
+/.firebase/
+firebase-debug*.log

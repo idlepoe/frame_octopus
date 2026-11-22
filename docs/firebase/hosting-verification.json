@@ -1,0 +1,34 @@
+{
+  "project": "frame-octopus",
+  "android_package": "ink.frameoctopus.frame_octopus",
+  "android_app_id": "1:18444933139:android:03c4c58207011ebdd207e6",
+  "checked": "2026-11-22",
+  "pages": [
+    {
+      "path": "/privacy",
+      "status": 200,
+      "has_csp": true,
+      "no_scripts": true,
+      "bytes": 5930
+    },
+    {
+      "path": "/ko/privacy",
+      "status": 200,
+      "has_csp": true,
+      "no_scripts": true,
+      "bytes": 6818
+    },
+    {
+      "path": "/ja/privacy",
+      "status": 200,
+      "has_csp": true,
+      "no_scripts": true,
+      "bytes": 7067
+    }
+  ],
+  "device_firebase_initialization": "Confirmed on Samsung SM-A346N (Android 16)",
+  "app_privacy_link": "Opened the hosted English policy in Android Chrome from Advanced",
+  "flutter_tests": 17,
+  "windows_debug_build": "passed",
+  "android_debug_build": "passed"
+}

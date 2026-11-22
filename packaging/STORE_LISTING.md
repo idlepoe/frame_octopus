@@ -1,21 +1,96 @@
-# Store listing draft — Frame Octopus
+# Store listing — Frame Octopus 1.0.0
 
-Version: 0.2.0
-Category: Photo & video
-Supported desktop languages: Korean, English, Japanese
+Product ID: 9NVSS25893SG
+Category: Photo + video
+Price: Free
+Availability: Public, worldwide, after certification
+Languages: English (US), Korean, Japanese
 
-English summary: Turn videos into clear, shareable contact sheets — offline.
-English description: Drop one or more videos, choose a still or animated collection, and let Frame Octopus select and arrange representative scenes. Set a maximum file size: the app measures the encoded output and adjusts quality, resolution, frame rate and scene count as necessary. Preserve the original aspect ratio or choose a crop. Preview and save only the results you want. All media processing happens on your PC; your source videos remain unchanged.
+## en-us
 
-Korean summary: 영상의 장면을 한눈에 모으는 오프라인 이미지 도구.
-Korean description: 여러 영상을 끌어놓고 사진 모음 또는 움직이는 모음을 만드세요. 장면 선택과 배치는 자동으로 처리합니다. 파일당 최대 용량을 선택하면 실제 생성 크기를 확인하며 화질, 해상도, FPS, 장면 수를 조정합니다. 원하는 결과만 선택해 저장할 수 있고 원본 영상은 변경하지 않습니다.
+Create still and animated video contact sheets, offline on your PC.
 
-Japanese summary: 動画のシーンをひと目でまとめるオフラインツール。
-Japanese description: 複数の動画から静止画一覧やアニメーション一覧を作成。シーンの選択と配置を自動化し、出力サイズを測定しながら容量上限に合わせて調整します。元動画は変更せず、PC内で処理します。
+Turn video clips into clear, shareable scene collections. Frame Octopus creates still PNG contact sheets and looping animated WebP sheets, with all media processing on your Windows PC.
 
-Screenshots: docs/screenshots/studio-welcome.png, studio-editor.png, studio-results.png. Refresh against the final Store identity build.
-Privacy policy: docs/PRIVACY.md must be published at a public stable URL before submission.
-Support URL: https://github.com/idlepoe/frame_octopus/issues (verify repository visibility before submission).
-Age ratings, Store product identity and publisher display name must come from the developer's Partner Center product. Do not infer or submit declarations for the developer.
+Drop one or more videos, preview the source, choose still or animated output, and create. Scene count, clip length and FPS can be selected automatically. Automatic FPS follows the source rate and reduces work for longer clips; Advanced settings let you choose your own values.
 
-The final screenshots and demo use local Mixkit footage, with source hashes and per-item license labels in distribution-media/SOURCES.json. Use distribution-media/screenshots/store-*-1920x1080.png for the listing; distribution-media/videos/frame-octopus-demo-1080p.mp4 is the app demonstration. Review the media README before public submission.
+Choose a maximum size per output file, with 20 MB as the default. A short representative sample estimates compression before the full animation is encoded. The app checks the finished file size and adjusts if needed. It prioritizes fast generation rather than filling every spare byte.
+
+Keep the original scene ratio or choose a crop, and use flexible rows that avoid unused grid cells. Review results, zoom in, select the collections you want and save them to a folder. A confirmation shows how many files were saved. Existing export files receive distinct names.
+
+No account, advertisements or media uploads. Your source videos stay unchanged. English is the default; Korean and Japanese are also available. Animated sheets show representative clips together and contain no audio; they do not export the entire source timeline.
+
+- Still PNG and looping animated WebP contact sheets
+- Add multiple videos with drag and drop and preview the source
+- Automatic scene count, clip duration and source-aware FPS
+- Per-file size limits with a 20 MB default and measured final-size checks
+- Fast sample-based compression prediction
+- Original or cropped scene ratios and flexible final rows
+- Select results, zoom preview and collision-safe folder export
+- Saved-file confirmation and remembered preferences
+- Offline processing; no account or advertising
+- English, Korean and Japanese interface
+
+Keywords: video, contact sheet, WebP, thumbnail, PNG, frames, offline
+
+## ko-kr
+
+영상을 사진 모음과 움직이는 WebP로 만드는 오프라인 도구입니다.
+
+영상의 여러 장면을 한눈에 보고 공유할 수 있는 모음으로 만드세요. Frame Octopus는 사진 모음 PNG와 움직이는 모음 WebP를 Windows PC 안에서 생성합니다.
+
+영상을 끌어놓고 미리본 뒤 사진 또는 움직이는 모음을 선택해 생성하세요. 장면 수, 장면당 재생 시간과 FPS를 자동으로 정할 수 있으며 상세 설정에서 직접 조절할 수도 있습니다.
+
+결과 파일마다 최대 용량을 선택할 수 있고 기본값은 20 MB입니다. 짧은 표본으로 용량을 예측한 뒤 결과를 인코딩하고, 실제 크기가 한도를 넘으면 보정합니다. 남는 용량을 억지로 채우기보다 빠른 생성을 우선합니다.
+
+원본 장면 비율을 유지하거나 원하는 비율로 자를 수 있습니다. 마지막 행은 유연하게 배치해 빈 칸을 줄입니다. 생성한 결과를 확대하고 원하는 파일만 선택해 폴더에 저장하세요. 저장 완료 알림이 표시되며 기존 파일은 덮어쓰지 않습니다.
+
+계정이나 광고, 영상 업로드가 없으며 원본 영상은 변경하지 않습니다. 기본 언어는 영어이고 한국어와 일본어도 지원합니다. 움직이는 모음은 대표 구간을 함께 재생하며 오디오는 포함하지 않습니다. 전체 영상을 변환하는 기능과는 다릅니다.
+
+- 사진 모음 PNG 및 움직이는 모음 WebP 생성
+- 여러 영상 끌어놓기와 원본 미리보기
+- 장면 수·재생 시간·원본 기반 FPS 자동 설정
+- 파일당 최대 용량 설정 및 실제 생성 크기 확인
+- 기본 20 MB, 표본 기반 빠른 용량 예측
+- 원본 비율 유지 또는 비율 자르기와 유연한 마지막 행
+- 결과 선택·확대·이름 충돌을 피하는 폴더 저장
+- 저장 완료 알림과 설정 기억
+- PC 안에서 처리, 계정과 광고 없음
+- 영어·한국어·일본어 지원
+
+Keywords: 영상, 썸네일, WebP, PNG, 장면, 동영상, 오프라인
+
+## ja-jp
+
+動画から静止画一覧と動くWebPを作るオフラインツール。
+
+動画のシーンを見やすく共有しやすい一覧にまとめます。Frame Octopusは静止画のPNG一覧と、ループ再生するWebP一覧をWindows PC内で作成します。
+
+動画をドラッグしてプレビューし、静止画またはアニメーションを選んで作成。シーン数、各区間の長さ、元動画に合わせたFPSを自動設定できます。詳細設定で手動調整も可能です。
+
+出力ファイルごとに容量上限を選択でき、初期値は20 MBです。短いサンプルで容量を予測してから全体をエンコードし、実際の容量が上限を超えた場合のみ補正します。余った容量を埋める細かな探索より、すばやい作成を優先します。
+
+元の比率を保持するか、指定した比率に切り抜けます。最後の行は柔軟に配置して空きセルを減らします。結果を拡大し、保存したい一覧だけを選んでフォルダーへ保存。保存完了を通知し、既存ファイルは上書きしません。
+
+アカウントや広告、動画のアップロードはありません。元動画も変更しません。初期言語は英語で、日本語と韓国語にも対応。動く一覧は代表区間を同時再生し、音声や動画全体の書き出しは含みません。
+
+- 静止画PNGとループ再生WebPの一覧を作成
+- 複数動画のドラッグ＆ドロップとプレビュー
+- シーン数・区間の長さ・FPSを自動設定
+- 出力ごとの容量上限と実測サイズ確認
+- 初期値20 MB、サンプルによる高速な容量予測
+- 比率の保持や切り抜き、柔軟な最終行
+- 結果の選択・拡大・名前の重複を避けた保存
+- 保存完了通知と設定の記憶
+- PC内で処理、アカウントと広告なし
+- 英語・日本語・韓国語に対応
+
+Keywords: 動画, サムネイル, WebP, PNG, シーン, 一覧, オフライン
+
+## Media and support
+
+Four current native screenshots: distribution-media/screenshots/store-{welcome,editor,results,preview}-1920x1080.png. Store icon: store-logo-300.png. Store-format trailer: distribution-media/videos/frame-octopus-store-trailer-1080p30.mp4.
+
+Privacy/support: https://gist.github.com/idlepoe/a9d2af09558b57ae532b9f41be53b3af
+
+IARC preview: Everyone / 3+. Binding IARC terms and adult confirmation remain unchecked pending the account owner confirmation.

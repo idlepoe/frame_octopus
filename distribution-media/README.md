@@ -38,3 +38,7 @@ The latest single-sample results are in `fast-optimization/`. One representative
 ## Automatic FPS verification
 
 `automatic-fps/` contains output from a locally generated 60 FPS test pattern and a sanitized native report demonstrating automatic 30 FPS output. Automatic FPS also reduces the rate for long clips to approximately 120 frames per scene, without adding compression probes.
+
+## First Store submission assets (2026-11-22)
+
+The current-version screenshots and demo were recaptured for the first Store submission. The 1920x1080 PNG views were registered in English, Korean and Japanese listings. `frame-octopus-store-trailer-1080p30.mp4` is the compatible H.264 High/30 FPS/AAC-LC stereo version, with silent audio and closed GOP, created from the native capture without changing its playback timing. The English listing includes the video, an editor thumbnail and title. The source capture is 18.9 seconds; the remuxed Store trailer is approximately 18.97 seconds. Submitted media is separate from the Store certification result.

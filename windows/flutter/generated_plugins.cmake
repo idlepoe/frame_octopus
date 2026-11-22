@@ -5,9 +5,12 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   ffmpeg_kit_flutter_new_full
+  firebase_core
   media_kit_libs_windows_video
   media_kit_video
   screen_retriever_windows
+  share_plus
+  url_launcher_windows
   window_manager
 )
 
