@@ -961,6 +961,35 @@ class _AdvancedOptionsState extends State<_AdvancedOptions> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                tx('표시 옵션'),
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(child: Text(tx('타임스탬프 표시'))),
+                  const SizedBox(width: 16),
+                  f.ToggleSwitch(
+                    key: const ValueKey('advanced-timestamps-switch'),
+                    checked: studio.timestamps,
+                    onChanged: studio.busy || studio.importing
+                        ? null
+                        : (value) => setState(() {
+                            studio.timestamps = value;
+                            studio.savePreferences();
+                          }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(tx('각 장면의 원본 영상 시작 시간을 표시합니다.')),
+              const Divider(height: 32),
+              Text(
+                tx('애니메이션'),
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(child: Text(tx('FPS 자동'))),

@@ -218,6 +218,9 @@ class _DesktopStudioState extends State<DesktopStudio> with WindowListener {
       if (payload is Map && payload['autoFps'] is bool) {
         studio.autoFps = payload['autoFps'] as bool;
       }
+      if (payload is Map && payload['timestamps'] is bool) {
+        studio.timestamps = payload['timestamps'] as bool;
+      }
       final inputs = payload is Map
           ? (payload['inputs'] as List).cast<String>()
           : payload is List

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-22",
+  "option": "Show timestamps",
+  "default": false,
+  "format": "HH:MM:SS",
+  "location": "bottom-left of each scene, white text on a dark badge",
+  "animated_behavior": "static source start time for each scene clip",
+  "flutter_tests": 20,
+  "desktop_native_outputs": [
+    {
+      "kind": "sheet",
+      "bytes": 994388,
+      "width": 1234,
+      "height": 580,
+      "frames": 1
+    },
+    {
+      "kind": "animatedSheet",
+      "bytes": 642108,
+      "width": 484,
+      "height": 230,
+      "frames": 48
+    }
+  ],
+  "android": {
+    "device": "Samsung SM-A346N / Android 16",
+    "png_bytes": 1202541,
+    "native_png_visually_verified": true,
+    "settings_persistence_verified": true
+  }
+}

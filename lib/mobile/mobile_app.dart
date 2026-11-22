@@ -575,6 +575,21 @@ class _MobileStudioState extends State<MobileStudio>
                     '1280pxは画質とスマートフォンでの処理時間のバランスを考えた初期値です。容量に応じてさらに縮小します。',
                   ),
                 ),
+                MobileToggle(
+                  key: const ValueKey('mobile-timestamps-switch'),
+                  title: Text(t('Show timestamps', '타임스탬프 표시', 'タイムスタンプを表示')),
+                  value: studio.timestamps,
+                  onChanged: locked
+                      ? null
+                      : (value) => update(() => studio.timestamps = value),
+                ),
+                Text(
+                  t(
+                    'Show each scene’s start time in the source video.',
+                    '각 장면의 원본 영상 시작 시간을 표시합니다.',
+                    '元動画における各シーンの開始時刻を表示します。',
+                  ),
+                ),
                 const Divider(height: 32),
                 Text(
                   t('Animation', '애니메이션', 'アニメーション'),

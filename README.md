@@ -95,3 +95,7 @@ Current native PNG screenshots, Store-framed 1920x1080 versions, a 1080p app dem
 ## Hosted privacy policy
 
 Privacy policy: [English](https://frame-octopus.web.app/privacy) · [한국어](https://frame-octopus.web.app/ko/privacy) · [日本語](https://frame-octopus.web.app/ja/privacy). Android's Advanced panel opens the selected language. Firebase Core is connected to the Android app; analytics and cloud media uploads are not enabled. See [Hosting deployment documentation](hosting/README.md).
+
+## Scene timestamps
+
+Windows and Android Advanced settings include **Show timestamps** (off by default, remembered). PNG and animated WebP contact sheets can label every scene with its source timestamp at the bottom-left. Animated clips show their source start time rather than a running clock. See [generated examples and verification](docs/screenshots/timestamps/verification.json).

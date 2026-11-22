@@ -207,7 +207,7 @@ void main() {
       );
       SharedPreferences.setMockInitialValues({
         'studio_options_v1':
-            '{"kind":"sheet","scenes":12,"mb":5,"fps":30,"clip":10,"autoClip":false,"autoFps":false,"layout":"16:9","aspect":"1:1"}',
+            '{"kind":"sheet","scenes":12,"mb":5,"fps":30,"clip":10,"autoClip":false,"autoFps":false,"timestamps":true,"layout":"16:9","aspect":"1:1"}',
       });
       final controller = StudioController();
       await controller.loadPreferences();
@@ -217,10 +217,13 @@ void main() {
       expect(controller.settings().clipSeconds, 10);
       expect(controller.autoClip, false);
       expect(controller.autoFps, false);
+      expect(controller.timestamps, true);
+      expect(controller.settings().timestamps, true);
       controller.resetPreferences();
       expect(controller.targetMb, 20);
       expect(controller.autoClip, true);
       expect(controller.autoFps, true);
+      expect(controller.timestamps, false);
       expect(controller.sceneAspect, 'source');
       for (final entry in desktopCopy.entries) {
         expect(entry.value.length, 2);

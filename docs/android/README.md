@@ -95,3 +95,7 @@ The mobile workbench now replaces its main content by workflow state rather than
 Interrupted, partially failed and empty outputs have distinct status messages. Missing-file details can be expanded. Deleting saved app results is not reported as an encoding failure. The existing foreground-only processing behavior remains unchanged.
 
 Reference observations and screenshots: `docs/android-reference/progress-flow/`. Real-device captures: `docs/android/screenshots/progress-flow/`.
+
+## Optional scene timestamps
+
+Advanced → Show timestamps adds a white HH:MM:SS label on a dark badge at the bottom-left of each scene. It is available for both still PNG and animated WebP, defaults to off and persists with preferences. Reset settings turns it off. Still sheets label the sampled source time; animated sheets label each clip's source start time (the label is not a running playback clock). New results use the option; existing output files are unchanged. Android settings/result captures are in `screenshots/timestamps/`.

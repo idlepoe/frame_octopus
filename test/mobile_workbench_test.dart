@@ -18,6 +18,32 @@ class _StoppableStudio extends StudioController {
 }
 
 void main() {
+  testWidgets('timestamps are optional and remain available for still PNG', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final studio = StudioController()..kind = OutputKind.sheet;
+    await tester.pumpWidget(MobileOctopusApp(controller: studio));
+    await tester.pumpAndSettle();
+    expect(studio.timestamps, false);
+    await tester.tap(find.text('Advanced'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('mobile-timestamps-switch')),
+      180,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('Show timestamps'));
+    await tester.pumpAndSettle();
+    expect(studio.settings().timestamps, true);
+    final restored = StudioController();
+    await restored.loadPreferences();
+    expect(restored.timestamps, true);
+    restored.kind = OutputKind.animatedSheet;
+    expect(restored.settings().timestamps, true);
+    restored.dispose();
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('processing replaces inputs and completion replaces processing', (
     tester,
   ) async {
@@ -68,7 +94,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(tester.getRect(find.text('Stop')).bottom, lessThan(640));
       expect(tester.getSize(find.byType(MobileButton)).height, lessThan(80));
-      expect(tester.getSize(find.byType(MobileProcessingView)).height, greaterThan(300));
+      expect(
+        tester.getSize(find.byType(MobileProcessingView)).height,
+        greaterThan(300),
+      );
       await tester.tap(find.text('Stop'));
       await tester.pumpAndSettle();
       expect(find.text('Stopped'), findsOneWidget);

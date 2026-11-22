@@ -99,6 +99,14 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(studio.autoClip, true);
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('advanced-timestamps-switch')),
+      );
+      await tester.tap(
+        find.byKey(const ValueKey('advanced-timestamps-switch')),
+      );
+      await tester.pumpAndSettle();
+      expect(studio.settings().timestamps, true);
       expect(
         tester
             .widget<f.Slider>(find.byKey(const ValueKey('advanced-fps-slider')))

@@ -19,6 +19,7 @@ class StudioController extends ChangeNotifier {
   int outputWidth = Platform.isAndroid ? 1280 : 1920;
   double clipSeconds = 2;
   bool autoClip = true, autoFps = true;
+  bool timestamps = false;
   String layoutShape = 'auto', sceneAspect = 'source';
   Future<void> _preferenceWrite = Future.value();
   Future<void> loadPreferences() async {
@@ -41,6 +42,7 @@ class StudioController extends ChangeNotifier {
       autoFps = data['autoFps'] as bool? ?? true;
       clipSeconds = ((data['clip'] as num?)?.toDouble() ?? 2).clamp(.5, 10);
       autoClip = data['autoClip'] as bool? ?? true;
+      timestamps = data['timestamps'] as bool? ?? false;
       if (Platform.isAndroid &&
           [960, 1280, 1920].contains(data['mobileWidth'])) {
         outputWidth = data['mobileWidth'] as int;
@@ -66,6 +68,7 @@ class StudioController extends ChangeNotifier {
       'autoFps': autoFps,
       'clip': clipSeconds,
       'autoClip': autoClip,
+      'timestamps': timestamps,
       if (Platform.isAndroid) 'mobileWidth': outputWidth,
       'layout': layoutShape,
       'aspect': sceneAspect,
@@ -90,6 +93,7 @@ class StudioController extends ChangeNotifier {
     autoFps = true;
     clipSeconds = 2;
     autoClip = true;
+    timestamps = false;
     outputWidth = Platform.isAndroid ? 1280 : 1920;
     layoutShape = 'auto';
     sceneAspect = 'source';
@@ -136,7 +140,7 @@ class StudioController extends ChangeNotifier {
       ..crop = sceneAspect != 'source'
       ..imageFormat = 'png'
       ..header = false
-      ..timestamps = false;
+      ..timestamps = timestamps;
     if (autoClip && metadata != null && kind != OutputKind.sheet) {
       // Determine usable cuts before choosing duration, avoiding a circular
       // dependency between adaptive cut count and animation clip length.

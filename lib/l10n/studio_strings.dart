@@ -2,6 +2,13 @@ import 'app_language.dart';
 
 // New desktop copy lives here; the inherited processor retains its own catalog.
 const desktopCopy = <String, List<String>>{
+  '표시 옵션': ['Appearance', '表示'],
+  '타임스탬프 표시': ['Show timestamps', 'タイムスタンプを表示'],
+  '각 장면의 원본 영상 시작 시간을 표시합니다.': [
+    'Show each scene’s start time in the source video.',
+    '元動画における各シーンの開始時刻を表示します。',
+  ],
+  '애니메이션': ['Animation', 'アニメーション'],
   '품질 최적화 {0} · {1}': ['Optimizing quality {0} · {1}', '画質最適化 {0} · {1}'],
   '품질 {0}': ['Quality {0}', '画質 {0}'],
   '크게 보기': ['Zoom preview', '拡大表示'],
